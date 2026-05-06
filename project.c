@@ -2,7 +2,9 @@
 
 int main(void)
 {
-    printf("Hello, World!\n");
-    
+    printf("================================================\n");
+    printf("\tWELCOME TO GADGET FINDING SYSTEM\n");
+    printf("================================================\n");
+
     return 0;
 }
