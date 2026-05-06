@@ -41,7 +41,7 @@ void sign_in(User *user)
     printf("Enter Password: ");
     if(!fgets(user->password, sizeof(user->password), stdin)) {
         printf("Error reading password.\n");
-        continue;;
+        continue;
     }
     else if(strlen(user->password) == 1) {
         printf("Password cannot be empty.\n");
@@ -49,11 +49,11 @@ void sign_in(User *user)
     }
     else if(strlen(user->password) < 8) {
         printf("Password must be at least 8 characters long.\n");
-        continue;;
+        continue;
     }
     else if(strchr(user->password, ' ') != NULL) {
         printf("Password cannot contain spaces.\n");
-        continue;;
+        continue;
     }
     user->password[strcspn(user->password, "\n")] = '\0'; // Remove newline character
     break;
