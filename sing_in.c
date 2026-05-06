@@ -32,7 +32,7 @@ void sign_in(User *user)
     }
     else if(strchr(user->username, ' ') != NULL) {
         printf("Username cannot contain spaces.\n");
-        continue;;
+        continue;
     }
     user->username[strcspn(user->username, "\n")] = '\0'; // Remove newline character
     break;
