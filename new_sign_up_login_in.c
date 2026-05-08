@@ -2,49 +2,74 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <unistd.h>
-#include <limits.h>
-#include <magic.h>
+
+#ifdef _WIN32
+    #define CLEAR "cls"
+#else
+    #define CLEAR "clear"
+#endif
+
 typedef struct {
     char file_username[50];
     char file_password[50];
     char username[50];
     char password[50];
+    int choice;
+    int c;
+    int success;
 } Sign_Up_Input;
-
+typedef struct {
+        int choice;
+        char gadget_name[50];
+        char gadget_description[200];
+}gadget_information;
+void sign_Up_interface(Sign_Up_Input *sign_up_input);
 void sign_Up(Sign_Up_Input *sign_up_input);
 void Log_In(Sign_Up_Input *sign_up_input);
+void gadget_interface(gadget_information *gadget_info);
 
 int main(void)
 {
-    int choice;
     Sign_Up_Input sign_up_input;
-    int c;
+    gadget_information gadget_info;
+    sign_Up_interface(&sign_up_input);
+    gadget_interface(&gadget_info);
 
-    printf("================================================\n");
-    printf("\tWELCOME TO GADGET FINDING SYSTEM\n");
-    printf("================================================\n");
 
-    while (1) {
+    return 0;
+}
+void sign_Up_interface(Sign_Up_Input *sign_up_input)
+{
+    system(CLEAR);
+    printf("================================================\n");
+    printf("\tSIGN UP FOR GADGET FINDING SYSTEM\n");
+    printf("================================================\n");
+    printf("Please follow the instructions to create your account.\n");
+    printf("- Username must be at least 5 characters long and cannot contain spaces.\n");
+    printf("- Password must be at least 8 characters long and cannot contain spaces.\n");
+    printf("Let's get started!\n");
+        while (1) {
         printf("1. Sign Up\n");
         printf("2. Log In\n");
         printf("3. Exit\n");
         printf("Enter your choice: ");
 
-        if (scanf("%d", &choice) != 1) {
+        if (scanf("%d", &sign_up_input->choice) != 1) {
             printf("Invalid input. Please enter a number.\n");
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((sign_up_input->c = getchar()) != '\n' && sign_up_input->c != EOF);
             continue;
         }
-        while ((c = getchar()) != '\n' && c != EOF);
+        while ((sign_up_input->c = getchar()) != '\n' && sign_up_input->c != EOF);
 
-        switch (choice) {
+        switch (sign_up_input->choice) {
         case 1:
             sign_Up(&sign_up_input);
             break;
         case 2:
             Log_In(&sign_up_input);
-            break;
+            if(sign_up_input->success)
+            return;
+            else break;
         case 3:
             printf("Exiting...\n");
             return 0;
@@ -52,16 +77,15 @@ int main(void)
             printf("Invalid choice. Please try again.\n");
             break;
         }
-    }
-    return 0;
 }
-
+}
 void sign_Up(Sign_Up_Input *sign_up_input)
 {
-    system("clear || cls");
+    system(CLEAR);
     printf("================================================\n");
     printf("\tSIGN UP FOR GADGET FINDING SYSTEM\n");
     printf("================================================\n");
+
     while (1) {
         printf("Enter Username: ");
         if (!fgets(sign_up_input->file_username, sizeof(sign_up_input->file_username), stdin)) {
@@ -82,7 +106,6 @@ void sign_Up(Sign_Up_Input *sign_up_input)
             printf("Username cannot contain spaces.\n");
             continue;
         }
-
 
         char existing_user[50], existing_pass[50];
         FILE *check = fopen("sign_up.txt", "r");
@@ -125,23 +148,25 @@ void sign_Up(Sign_Up_Input *sign_up_input)
         }
         break;
     }
+
     FILE *user_file = fopen("sign_up.txt", "a");
-        if (user_file == NULL) {
-         printf("Unable to save user information.\n");
-            return;
-        } 
-    fprintf(user_file, "%s %s\n", sign_up_input->file_username,sign_up_input->file_password);
+    if (user_file == NULL) {
+        printf("Unable to save user information.\n");
+        return;
+    }
+    fprintf(user_file, "%s %s\n", sign_up_input->file_username, sign_up_input->file_password);
     fclose(user_file);
     printf("Sign-Up Successful! Now Log In to continue.\n");
-                
 }
-
 void Log_In(Sign_Up_Input *sign_up_input)
 {
-    system("clear || cls");
+    system(CLEAR);
     printf("================================================\n");
     printf("\tLOG IN TO GADGET FINDING SYSTEM\n");
     printf("================================================\n");
+
+    int attempts = 0;  // ✅ outside the loop — persists across iterations
+
     while (1) {
         while (1) {
             printf("Enter Username: ");
@@ -178,7 +203,9 @@ void Log_In(Sign_Up_Input *sign_up_input)
         }
 
         int found = 0;
-        while (fscanf(user_file, "%s %s",sign_up_input->file_username,sign_up_input->file_password) == 2) {
+        while (fscanf(user_file, "%s %s",
+                      sign_up_input->file_username,
+                      sign_up_input->file_password) == 2) {
             if (strcmp(sign_up_input->file_username, sign_up_input->username) == 0) {
                 found = 1;
                 if (strcmp(sign_up_input->file_password, sign_up_input->password) == 0)
@@ -188,24 +215,29 @@ void Log_In(Sign_Up_Input *sign_up_input)
         }
         fclose(user_file);
 
-        int success = 0;
         switch (found) {
         case 0:
-            printf("No such user found. Please sign up first.\n");
-            return;
+            printf("Invalid username. Please try again.\n");
+            attempts++;
+            break;
         case 1:
             printf("Incorrect password. Please try again.\n");
+            attempts++;
             break;
         case 3:
             printf("Log In Successful! Welcome back, %s!\n", sign_up_input->username);
-            success = 1;
+            sign_up_input->success = 1;
             break;
         default:
             printf("An unexpected error occurred.\n");
             return;
         }
 
-        if (success) break;
+        if (attempts >= 3) {
+            printf("Too many failed attempts. Please try again later.\n");
+            return;
+        }
+        if (sign_up_input->success) break;
     }
     printf("Now you can access the gadget finding system features.\n");
 }
