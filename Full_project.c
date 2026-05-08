@@ -262,8 +262,10 @@ void Log_In(Sign_Up_Input *sign_up_input)
         fclose(user_file);
 
         if (found == 2) {
-            printf("Login Successful!\n");
+            printf("Login Successful!Welcome %s\n", sign_up_input->username);
             sign_up_input->success = 1;
+            printf("Press Enter to continue...");
+            getchar();
             return;
         }
         else if (found == 1)
@@ -274,7 +276,9 @@ void Log_In(Sign_Up_Input *sign_up_input)
         attempts++;
     }
 
-    printf("Too many failed attempts.\n");
+    printf("Too many failed attempts.Plese try again later or Sign Up\n");
+    printf("Press Enter to continue...");
+    getchar();
 }
 
 /* ------------------------------------------------------------------ */
