@@ -14,15 +14,15 @@ typedef struct {
     char file_password[50];
     char username[50];
     char password[50];
-    int choice;
-    int c;
-    int success;
+    int success;  // shared across functions — acceptable in struct
 } Sign_Up_Input;
+
 typedef struct {
-        int choice;
-        char gadget_name[50];
-        char gadget_description[200];
-}gadget_information;
+    int choice;
+    char gadget_name[50];
+    char gadget_description[200];
+} gadget_information;
+
 void sign_Up_interface(Sign_Up_Input *sign_up_input);
 void sign_Up(Sign_Up_Input *sign_up_input);
 void Log_In(Sign_Up_Input *sign_up_input);
@@ -30,55 +30,59 @@ void gadget_interface(gadget_information *gadget_info);
 
 int main(void)
 {
-    Sign_Up_Input sign_up_input;
+    Sign_Up_Input sign_up_input = {0};  // ✅ zero-initialize all fields
     gadget_information gadget_info;
-    sign_Up_interface(&sign_up_input);
-    gadget_interface(&gadget_info);
 
+    sign_Up_interface(&sign_up_input);
+
+    if (sign_up_input.success)          // ✅ only enter if logged in
+        gadget_interface(&gadget_info);
 
     return 0;
 }
+
 void sign_Up_interface(Sign_Up_Input *sign_up_input)
 {
+    int choice, c;  // ✅ local variables, not in struct
     system(CLEAR);
     printf("================================================\n");
-    printf("\tSIGN UP FOR GADGET FINDING SYSTEM\n");
+    printf("\tWELCOME TO GADGET FINDING SYSTEM\n");
     printf("================================================\n");
-    printf("Please follow the instructions to create your account.\n");
     printf("- Username must be at least 5 characters long and cannot contain spaces.\n");
     printf("- Password must be at least 8 characters long and cannot contain spaces.\n");
-    printf("Let's get started!\n");
-        while (1) {
+
+    while (1) {
         printf("1. Sign Up\n");
         printf("2. Log In\n");
         printf("3. Exit\n");
         printf("Enter your choice: ");
 
-        if (scanf("%d", &sign_up_input->choice) != 1) {
+        if (scanf("%d", &choice) != 1) {
             printf("Invalid input. Please enter a number.\n");
-            while ((sign_up_input->c = getchar()) != '\n' && sign_up_input->c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF);
             continue;
         }
-        while ((sign_up_input->c = getchar()) != '\n' && sign_up_input->c != EOF);
+        while ((c = getchar()) != '\n' && c != EOF);
 
-        switch (sign_up_input->choice) {
+        switch (choice) {
         case 1:
-            sign_Up(&sign_up_input);
+            sign_Up(sign_up_input);   // ✅ no & needed
             break;
         case 2:
-            Log_In(&sign_up_input);
-            if(sign_up_input->success)
-            return;
-            else break;
+            Log_In(sign_up_input);    // ✅ no & needed
+            if (sign_up_input->success)
+                return;
+            break;
         case 3:
             printf("Exiting...\n");
-            return 0;
+            return;                   // ✅ void function, no return value
         default:
             printf("Invalid choice. Please try again.\n");
             break;
         }
+    }
 }
-}
+
 void sign_Up(Sign_Up_Input *sign_up_input)
 {
     system(CLEAR);
@@ -158,6 +162,7 @@ void sign_Up(Sign_Up_Input *sign_up_input)
     fclose(user_file);
     printf("Sign-Up Successful! Now Log In to continue.\n");
 }
+
 void Log_In(Sign_Up_Input *sign_up_input)
 {
     system(CLEAR);
@@ -165,7 +170,7 @@ void Log_In(Sign_Up_Input *sign_up_input)
     printf("\tLOG IN TO GADGET FINDING SYSTEM\n");
     printf("================================================\n");
 
-    int attempts = 0;  // ✅ outside the loop — persists across iterations
+    int attempts = 0;
 
     while (1) {
         while (1) {
@@ -240,4 +245,12 @@ void Log_In(Sign_Up_Input *sign_up_input)
         if (sign_up_input->success) break;
     }
     printf("Now you can access the gadget finding system features.\n");
+}
+
+void gadget_interface(gadget_information *gadget_info)
+{
+    // TODO: implement gadget finding features
+    printf("================================================\n");
+    printf("\tGADGET FINDING SYSTEM\n");
+    printf("================================================\n");
 }
