@@ -52,7 +52,6 @@ int compareByPrice(const void *a, const void *b);
 
 void searchProducts(void);
 
-/* ------------------------------------------------------------------ */
 int main(void)
 {
     Sign_Up_Input sign_up_input = {0};
@@ -65,12 +64,12 @@ int main(void)
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
 void sign_Up_interface(Sign_Up_Input *sign_up_input)
 {
     int choice, c;
 
-    while (1) {
+    while (1) 
+    {
         system(CLEAR);
 
         printf("================================================\n");
@@ -84,7 +83,8 @@ void sign_Up_interface(Sign_Up_Input *sign_up_input)
         printf("3. Exit\n");
         printf("Enter your choice: ");
 
-        if (scanf("%d", &choice) != 1) {
+        if (scanf("%d", &choice) != 1) 
+        {
             printf("Invalid input.\n");
             while ((c = getchar()) != '\n' && c != EOF);
             continue;
@@ -92,7 +92,8 @@ void sign_Up_interface(Sign_Up_Input *sign_up_input)
 
         while ((c = getchar()) != '\n' && c != EOF);
 
-        switch (choice) {
+        switch (choice) 
+        {
 
         case 1:
             sign_Up(sign_up_input);
@@ -116,32 +117,30 @@ void sign_Up_interface(Sign_Up_Input *sign_up_input)
     }
 }
 
-/* ------------------------------------------------------------------ */
 void sign_Up(Sign_Up_Input *sign_up_input)
 {
     system(CLEAR);
 
     printf("================================================\n");
-    printf("\tSIGN UP\n");
+    printf("\t WELCOME TO SIGN UP INTERFACE\n");
     printf("================================================\n");
 
-    while (1) {
+    while (1) 
+    {
         printf("Enter Username: ");
 
-        fgets(sign_up_input->file_username,
-              sizeof(sign_up_input->file_username),
-              stdin);
+        fgets(sign_up_input->file_username,sizeof(sign_up_input->file_username),stdin);
 
-        sign_up_input->file_username[
-            strcspn(sign_up_input->file_username, "\n")
-        ] = '\0';
+        sign_up_input->file_username[strcspn(sign_up_input->file_username, "\n")] = '\0';
 
-        if (strlen(sign_up_input->file_username) < 5) {
+        if (strlen(sign_up_input->file_username) < 5) 
+        {
             printf("Username too short.\n");
             continue;
         }
 
-        if (strchr(sign_up_input->file_username, ' ') != NULL) {
+        if (strchr(sign_up_input->file_username, ' ') != NULL) 
+        {
             printf("Username cannot contain spaces.\n");
             continue;
         }
@@ -151,7 +150,8 @@ void sign_Up(Sign_Up_Input *sign_up_input)
 
         if (check != NULL) {
             char user[50], pass[50];
-            while (fscanf(check, "%49s %49s", user, pass) == 2) {
+            while (fscanf(check, "%49s %49s", user, pass) == 2) 
+            {
                 if (strcmp(user, sign_up_input->file_username) == 0) {
                     duplicate = 1;
                     break;
@@ -171,13 +171,9 @@ void sign_Up(Sign_Up_Input *sign_up_input)
     while (1) {
         printf("Enter Password: ");
 
-        fgets(sign_up_input->file_password,
-              sizeof(sign_up_input->file_password),
-              stdin);
+        fgets(sign_up_input->file_password,sizeof(sign_up_input->file_password),stdin);
 
-        sign_up_input->file_password[
-            strcspn(sign_up_input->file_password, "\n")
-        ] = '\0';
+        sign_up_input->file_password[strcspn(sign_up_input->file_password, "\n")] = '\0';
 
         if (strlen(sign_up_input->file_password) < 8) {
             printf("Password too short.\n");
@@ -199,23 +195,19 @@ void sign_Up(Sign_Up_Input *sign_up_input)
         return;
     }
 
-    fprintf(user_file,
-            "%s %s\n",
-            sign_up_input->file_username,
-            sign_up_input->file_password);
+    fprintf(user_file,"%s %s\n",sign_up_input->file_username,sign_up_input->file_password);
 
     fclose(user_file);
 
     printf("Sign Up Successful!\n");
 }
 
-/* ------------------------------------------------------------------ */
 void Log_In(Sign_Up_Input *sign_up_input)
 {
     system(CLEAR);
 
     printf("================================================\n");
-    printf("\tLOG IN\n");
+    printf("\tWELCOME TO LOG IN INTERFACE\n");
     printf("================================================\n");
 
     int attempts = 0;
@@ -223,16 +215,12 @@ void Log_In(Sign_Up_Input *sign_up_input)
     while (attempts < 3) {
 
         printf("Enter Username: ");
-        fgets(sign_up_input->username,
-              sizeof(sign_up_input->username), stdin);
-        sign_up_input->username[
-            strcspn(sign_up_input->username, "\n")] = '\0';
+        fgets(sign_up_input->username,sizeof(sign_up_input->username), stdin);
+        sign_up_input->username[strcspn(sign_up_input->username, "\n")] = '\0';
 
         printf("Enter Password: ");
-        fgets(sign_up_input->password,
-              sizeof(sign_up_input->password), stdin);
-        sign_up_input->password[
-            strcspn(sign_up_input->password, "\n")] = '\0';
+        fgets(sign_up_input->password,sizeof(sign_up_input->password), stdin);
+        sign_up_input->password[strcspn(sign_up_input->password, "\n")] = '\0';
 
         FILE *user_file = fopen("sign_up.txt", "r");
 
@@ -243,17 +231,12 @@ void Log_In(Sign_Up_Input *sign_up_input)
 
         int found = 0;
 
-        while (fscanf(user_file,
-                      "%49s %49s",
-                      sign_up_input->file_username,
-                      sign_up_input->file_password) == 2)
+        while (fscanf(user_file,"%49s %49s",sign_up_input->file_username,sign_up_input->file_password) == 2)
         {
-            if (strcmp(sign_up_input->username,
-                       sign_up_input->file_username) == 0)
+            if (strcmp(sign_up_input->username,sign_up_input->file_username) == 0)
             {
                 found = 1;
-                if (strcmp(sign_up_input->password,
-                           sign_up_input->file_password) == 0)
+                if (strcmp(sign_up_input->password,sign_up_input->file_password) == 0)
                     found = 2;
                 break;
             }
@@ -262,10 +245,8 @@ void Log_In(Sign_Up_Input *sign_up_input)
         fclose(user_file);
 
         if (found == 2) {
-            printf("Login Successful!Welcome %s\n", sign_up_input->username);
+            printf("Login Successful!\n");
             sign_up_input->success = 1;
-            printf("Press Enter to continue...");
-            getchar();
             return;
         }
         else if (found == 1)
@@ -276,19 +257,17 @@ void Log_In(Sign_Up_Input *sign_up_input)
         attempts++;
     }
 
-    printf("Too many failed attempts.Plese try again later or Sign Up\n");
-    printf("Press Enter to continue...");
-    getchar();
+    printf("Too many failed attempts.\n");
 }
 
-/* ------------------------------------------------------------------ */
 void gadget_interface(void)
 {
     loadFromFile();
 
     int choice;
 
-    while (1) {
+    while (1) 
+    {
         system(CLEAR);
 
         printf("\n");
@@ -302,15 +281,18 @@ void gadget_interface(void)
         printf("5. Exit\n");
         printf("Enter choice: ");
 
-        if (scanf("%d", &choice) != 1) {
+        if (scanf("%d", &choice) != 1 || choice < 1 || choice > 5) 
+        {
             clearLeftoverInput();
             printf("Invalid input.\n");
+            printf("Please enter valid choice (1-5).\n");
             continue;
         }
 
         clearLeftoverInput();
 
-        switch (choice) {
+        switch (choice) 
+        {
         case 1: searchProducts(); break;
         case 2: showAllByType();  break;
         case 3: addProduct();     break;
@@ -327,10 +309,10 @@ void gadget_interface(void)
     }
 }
 
-/* ------------------------------------------------------------------ */
 void makeUpperCase(char *word)
 {
-    while (*word) {
+    while (*word) 
+    {
         *word = toupper((unsigned char)*word);
         word++;
     }
@@ -351,20 +333,21 @@ void printDashes(int howMany)
 
 void featureLabels(const char *type,char *label1,char *label2,int  *featureCount)
 {
-    if (strcmp(type, "TV") == 0) {
+    if (strcmp(type, "TV") == 0) 
+    {
         strcpy(label1, "Screen Size (inches)");
-        strcpy(label2, "");
-        *featureCount = 1;
+        strcpy(label2, "Display Type (OLED / LCD)");
+        *featureCount = 2;
     }
     else if (strcmp(type, "PHONE") == 0) {
         strcpy(label1, "RAM (GB)");
         strcpy(label2, "ROM (GB)");
         *featureCount = 2;
     }
-    else if (strcmp(type, "CAMERA") == 0) {
-        strcpy(label1, "Megapixels");
-        strcpy(label2, "");
-        *featureCount = 1;
+    else if (strcmp(type, "LAPTOP") == 0) {
+        strcpy(label1, "CPU GENERATION");
+        strcpy(label2, "RAM (GB)");
+        *featureCount = 2;
     }
     else {
         strcpy(label1, "Feature");
@@ -378,7 +361,8 @@ void loadFromFile(void)
 {
     FILE *file = fopen("Gadget_info.txt", "r");
 
-    if (file == NULL) {
+    if (file == NULL) 
+    {
         printf("No saved products found.\n");
         return;
     }
@@ -386,8 +370,7 @@ void loadFromFile(void)
     count = 0;
 
     while (count < MAX_ITEMS &&
-           fscanf(file,
-                  "%9s %49s %d %d %d",
+           fscanf(file,"%9s %49s %d %d %d",
                   items[count].type,
                   items[count].name,
                   &items[count].price,
@@ -405,12 +388,14 @@ void saveToFile(void)
 {
     FILE *file = fopen("Gadget_info.txt", "w");
 
-    if (file == NULL) {
+    if (file == NULL) 
+    {
         printf("Could not save file.\n");
         return;
     }
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) 
+    {
         fprintf(file,
                 "%s %s %d %d %d\n",
                 items[i].type,
@@ -439,15 +424,16 @@ void addProduct(void)
     printf("\n--- Add Product ---\n");
 
     /* --- type --- */
-    while (1) {
-        printf("Type (TV/PHONE/CAMERA): ");
+    while (1) 
+    {
+        printf("Type (TV/PHONE/LAPTOP): ");
         scanf("%9s", p.type);
         clearLeftoverInput();
         makeUpperCase(p.type);
 
         if (strcmp(p.type, "TV")     == 0 ||
             strcmp(p.type, "PHONE")  == 0 ||
-            strcmp(p.type, "CAMERA") == 0)
+            strcmp(p.type, "LAPTOP") == 0)
             break; 
         printf("Invalid type.\n");
     }
@@ -458,9 +444,11 @@ void addProduct(void)
     clearLeftoverInput();
 
     /* --- price --- */
-    while (1) {
+    while (1) 
+    {
         printf("Price: ");
-        if (scanf("%d", &p.price) == 1 && p.price > 0) {
+        if (scanf("%d", &p.price) == 1 && p.price > 0) 
+        {
             clearLeftoverInput();
             break;
         }
@@ -468,21 +456,23 @@ void addProduct(void)
         printf("Invalid price.\n");
     }
 
-    /* --- feature(s) ---
-       FIX: Loop now uses break (not return) so the product is saved.
-            feature2 is read for PHONE; 0 is stored for other types.   */
     featureLabels(p.type, label1, label2, &featureCount);
 
-    while (1) {
+    while (1) 
+    {
         printf("%s: ", label1);
-        if (scanf("%d", &p.feature) == 1 && p.feature > 0) {
+        if (scanf("%d", &p.feature) == 1 && p.feature > 0) 
+        {
             clearLeftoverInput();
 
-            if (featureCount == 2) {
+            if (featureCount == 2) 
+            {
                 /* PHONE: also ask for ROM */
-                while (1) {
+                while (1) 
+                {
                     printf("%s: ", label2);
-                    if (scanf("%d", &p.feature2) == 1 && p.feature2 > 0) {
+                    if (scanf("%d", &p.feature2) == 1 && p.feature2 > 0) 
+                    {
                         clearLeftoverInput();
                         break;
                     }
@@ -491,7 +481,7 @@ void addProduct(void)
                 }
             }
 
-            break;  /* FIX: was 'return', which skipped saving */
+            break;
         }
         clearLeftoverInput();
         printf("Invalid value.\n");
@@ -513,8 +503,10 @@ void deleteProduct(void)
 
     int foundAt = -1;
 
-    for (int i = 0; i < count; i++) {
-        if (strcasecmp(items[i].name, targetName) == 0) {
+    for (int i = 0; i < count; i++) 
+    {
+        if (strcasecmp(items[i].name, targetName) == 0) 
+        {
             foundAt = i;
             break;
         }
@@ -538,15 +530,16 @@ void showAllByType(void)
     char label1[100], label2[100];
     int  featureCount;
     char type[10];
-    while (1){
-    printf("Enter product type to display (TV/PHONE/CAMERA): ");
+    while (1)
+    {
+    printf("Enter product type to display (TV/PHONE/LAPTOP): ");
     scanf("%9s", type);
     makeUpperCase(type);           /* FIX: was missing in original */
     clearLeftoverInput();
   
     if (strcmp(type, "TV")     == 0 ||
         strcmp(type, "PHONE")  == 0 ||
-        strcmp(type, "CAMERA") == 0)
+        strcmp(type, "LAPTOP") == 0)
     {
       break;  
     }
@@ -562,12 +555,14 @@ void showAllByType(void)
     else
         printf("%-25s %-12s %-10s\n", "Name", "Price", label1);
 
-    printDashes(55);
+    printDashes(60);
 
     int found = 0;
 
-    for (int i = 0; i < count; i++) {
-        if (strcmp(items[i].type, type) == 0) {
+    for (int i = 0; i < count; i++) 
+    {
+        if (strcmp(items[i].type, type) == 0) 
+        {
             if (featureCount == 2)
                 printf("%-25s %-12d %-10d %-10d\n",
                        items[i].name, items[i].price,
@@ -585,8 +580,7 @@ void showAllByType(void)
 
 int compareByPrice(const void *a, const void *b)
 {
-    return ((product_information *)a)->price -
-           ((product_information *)b)->price;
+    return ((product_information *)a)->price - ((product_information *)b)->price;
 }
 
 void searchProducts(void){
@@ -602,7 +596,7 @@ void searchProducts(void){
 
     int featureCount;
 
-    printf("Enter product type to search (TV/PHONE/CAMERA): ");
+    printf("Enter product type to search (TV/PHONE/LAPTOP): ");
 
     scanf("%9s", type);
 
@@ -610,9 +604,7 @@ void searchProducts(void){
 
     clearLeftoverInput();
 
-    if (strcmp(type, "TV") != 0 &&
-        strcmp(type, "PHONE") != 0 &&
-        strcmp(type, "CAMERA") != 0)
+    if (strcmp(type, "TV") != 0 &&  strcmp(type, "PHONE") != 0 &&  strcmp(type, "LAPTOP") != 0)
     {
         printf("Invalid type.\n");
         return;
@@ -627,8 +619,7 @@ void searchProducts(void){
 
         printf("Maximum Budget: ");
 
-        if (scanf("%d", &budget) == 1 &&
-            budget > 0)
+        if (scanf("%d", &budget) == 1 && budget > 0)
         {
             clearLeftoverInput();
             break;
@@ -640,7 +631,8 @@ void searchProducts(void){
     }
 
 
-    while (1) {
+    while (1) 
+    {
 
         printf("Desired %s: ", label1);
 
@@ -657,14 +649,15 @@ void searchProducts(void){
     }
 
 
-    if (featureCount == 2) {
+    if (featureCount == 2) 
+    {
 
-        while (1) {
+        while (1) 
+        {
 
             printf("Desired %s: ", label2);
 
-            if (scanf("%d", &wantedFeature2) == 1 &&
-                wantedFeature2 > 0)
+            if (scanf("%d", &wantedFeature2) == 1 && wantedFeature2 > 0)
             {
                 clearLeftoverInput();
                 break;
@@ -676,12 +669,12 @@ void searchProducts(void){
         }
     }
 
-    while (1) {
+    while (1) 
+    {
 
-        printf("Tolerance (+/-): ");
+        printf("Tolerance (+/-) : ");
 
-        if (scanf("%d", &tolerance) == 1 &&
-            tolerance >= 0)
+        if (scanf("%d", &tolerance) == 1 && tolerance >= 0)
         {
             clearLeftoverInput();
             break;
@@ -696,35 +689,29 @@ void searchProducts(void){
 
     int resultCount = 0;
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) 
+    {
 
-        int typeMatch =
-            strcmp(items[i].type, type) == 0;
+        int typeMatch = strcmp(items[i].type, type) == 0;
 
-        int priceOkay =
-            items[i].price <= budget;
+        int priceOkay = items[i].price <= budget;
 
-        int featureOkay =
-            abs(items[i].feature - wantedFeature)
-            <= tolerance;
+        int featureOkay = abs(items[i].feature - wantedFeature) <= tolerance;
 
-        if (featureCount == 2) {
-
-            featureOkay =
-                featureOkay &&
-                abs(items[i].feature2 - wantedFeature2)
-                <= tolerance;
+        if (featureCount == 2) 
+        {
+            featureOkay = featureOkay && abs(items[i].feature2 - wantedFeature2) <= tolerance;
         }
 
-        if (typeMatch && priceOkay && featureOkay) {
-
+        if (typeMatch && priceOkay && featureOkay) 
+        {
             results[resultCount++] = items[i];
         }
     }
 
 
-    if (resultCount == 0) {
-
+    if (resultCount == 0) 
+    {
         printf("No matching products found.\n");
         return;
     }
@@ -740,15 +727,13 @@ void searchProducts(void){
     }
     else
     {
-        printf("%-25s %-12s %-15s\n",
-               "Name",
-               "Price",
-               label1);
+        printf("%-25s %-12s %-15s\n","Name","Price",label1);
     }
 
     printDashes(70);
 
-    for (int i = 0; i < resultCount; i++) {
+    for (int i = 0; i < resultCount; i++) 
+    {
 
         if (featureCount == 2)
         {
